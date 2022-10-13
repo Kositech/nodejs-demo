@@ -19,7 +19,7 @@ phases:
       - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
       # - echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
       # - . ~/.bashrc
-      - aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
+      - aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $AWS_CLUSTER_NAME --role-arn $AWS_ROLE_ARN
       - cat $HOME/.kube/config
   build:
     commands:
