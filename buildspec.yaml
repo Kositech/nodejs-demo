@@ -7,22 +7,25 @@ phases:
     commands:
       - apt-get -y update
   pre_build:
-      commands:
-        - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
-        - timeout 20 sh -c "until docker info; do echo .; sleep 1; done"
-        - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
-        - $(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})
-        - echo Installing app dependencies...
-        - curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.15.10/2020-02-22/bin/linux/amd64/kubectl   
-        - chmod +x ./kubectl
-        - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-        # - echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
-        # - . ~/.bashrc
-        - aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
+    commands:
+      - aws sts get-caller-identity
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
+      - timeout 20 sh -c "until docker info; do echo .; sleep 1; done"
+      - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+      - $(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})
+      - echo Installing app dependencies...
+      - curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.15.10/2020-02-22/bin/linux/amd64/kubectl   
+      - chmod +x ./kubectl
+      - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+      # - echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+      # - . ~/.bashrc
+      - aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $AWS_CLUSTER_NAME
+      - cat $HOME/.kube/config
   build:
     commands:
+      - aws sts get-caller-identity
+      - cat $HOME/.kube/config
       - export PATH=$PATH:$HOME/bin
-      - export KUBECONFIG=$HOME/.kube/config
       - docker build --tag $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$TAG
       - kubectl apply -f deployment.yaml
