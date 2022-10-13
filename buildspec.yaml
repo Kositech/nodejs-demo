@@ -3,7 +3,9 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: latest
+      docker: 19
+    commands:
+      - apt-get -y update
   pre_build:
       commands:
         - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
@@ -15,7 +17,7 @@ phases:
         - chmod +x ./kubectl
         - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
         - echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
-        - source ~/.bashrc
+        - . ~/.bashrc
   build:
     commands:
       - docker build --tag $REPOSITORY_URI:latest .
