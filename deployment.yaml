@@ -6,21 +6,22 @@ metadata:
     app: nodejs-demo
 spec:
   containers:
-  - image: nginx:1.14.2
-    name: nginxapp-image
+  - image: 109331241453.dkr.ecr.ap-east-1.amazonaws.com/nodejs-demo:latest
+    name: nodejs-demo
     ports:
-    - containerPort: 80
+    - containerPort: 3000
       protocol: TCP
+      name: http
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginxapp
+  name: nodejs-demo
 spec:
   selector:
-    app: nginxapp
+    app: nodejs-demo
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: http
