@@ -26,6 +26,7 @@ phases:
     commands:
       - docker build --tag $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$TAG
+      - ./twistcli images scan --address $ADDRESS --details $REPOSITORY_URI:$TAG
       - kubectl apply -f deployment.yaml
   post_build:
     commands:
