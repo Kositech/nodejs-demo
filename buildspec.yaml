@@ -12,6 +12,12 @@ phases:
         - timeout 20 sh -c "until docker info; do echo .; sleep 1; done"
         - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
         - $(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})
+        - echo Installing app dependencies...
+        - curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.15.10/2020-02-22/bin/linux/amd64/kubectl   
+        - chmod +x ./kubectl
+        - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+        - echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+        - source ~/.bashrc
   build:
     commands:
       - docker build --tag $REPOSITORY_URI:latest .
