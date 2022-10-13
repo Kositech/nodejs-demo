@@ -20,4 +20,3 @@ phases:
     commands:
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$TAG
-      - argocd app set app1-$ENV -p image.tag=$TAG
