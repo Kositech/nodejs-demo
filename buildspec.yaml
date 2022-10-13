@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      docker: 19
+      nodejs: latest
     commands:
       - apt-get -y update
   pre_build:
