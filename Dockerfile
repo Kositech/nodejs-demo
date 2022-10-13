@@ -1,5 +1,6 @@
 FROM docker.io/node:12.2
 
+# some updates
 WORKDIR /src/app
 
 COPY package.json package-lock.json ./
