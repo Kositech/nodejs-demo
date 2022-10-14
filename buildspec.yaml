@@ -19,14 +19,14 @@ phases:
       - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
       - |
        curl --progress-bar -L --header "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiY2hyaXMubGFpQGtvc2l0ZWNoLmNvbS5oayIsInJvbGUiOiJhZG1pbiIsImdyb3VwcyI6bnVsbCwicm9sZVBlcm1zIjpbWzI1NSwyNTUsMjU1LDI1NSwyNTUsMTI3LDFdLFsyNTUsMjU1LDI1NSwyNTUsMjU1LDEyNywxXV0sInNlc3Npb25UaW1lb3V0U2VjIjo1OTAsInNhYXNUb2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUo5LmV5SnpkV0lpT2lKamFISnBjeTVzWVdsQWEyOXphWFJsWTJndVkyOXRMbWhySWl3aWMyVnlkbWxqWlZWellXZGxUMjVzZVNJNmRISjFaU3dpWm1seWMzUk1iMmRwYmlJNlptRnNjMlVzSW5CeWFYTnRZVWxrSWpvaU1UQXhOREF3TkRnMk56TTNPRFF3TkRNMU1pSXNJbWx3UVdSa2NtVnpjeUk2SWpNMExqZzNMakV6Tnk0eE5ERWlMQ0pwYzNNaU9pSm9kSFJ3Y3pvdkwyRndhUzV6Wnk1d2NtbHpiV0ZqYkc5MVpDNXBieUlzSW5KbGMzUnlhV04wSWpvd0xDSjFjMlZ5VW05c1pWUjVjR1ZFWlhSaGFXeHpJanA3SW1oaGMwOXViSGxTWldGa1FXTmpaWE56SWpwbVlXeHpaWDBzSW5WelpYSlNiMnhsVkhsd1pVNWhiV1VpT2lKVGVYTjBaVzBnUVdSdGFXNGlMQ0pwYzFOVFQxTmxjM05wYjI0aU9tWmhiSE5sTENKc1lYTjBURzluYVc1VWFXMWxJam94TmpZMU56QTFPRGt6TmpnMkxDSmhkV1FpT2lKb2RIUndjem92TDJGd2FTNXpaeTV3Y21semJXRmpiRzkxWkM1cGJ5SXNJblZ6WlhKU2IyeGxWSGx3WlVsa0lqb3hMQ0p6Wld4bFkzUmxaRU4xYzNSdmJXVnlUbUZ0WlNJNklrbHVaM0poYlNCTmFXTnlieUFvUTJocGJtRXBJRXhwYldsMFpXUWdLRWhMS1NBdElEVXpOalkwTmpJNE5EVTRNalF3T0RFMU5qZ2lMQ0p6WlhOemFXOXVWR2x0Wlc5MWRDSTZNekFzSW5WelpYSlNiMnhsU1dRaU9pSTROR0k0TXpBd01DMDJNV1V4TFRRNE1HWXRZVEJpTUMxak5XSmlOVGRsWW1VNU9URWlMQ0pvWVhORVpXWmxibVJsY2xCbGNtMXBjM05wYjI1eklqcDBjblZsTENKbGVIQWlPakUyTmpVM01EWTBPVGNzSW1saGRDSTZNVFkyTlRjd05UZzVOeXdpZFhObGNtNWhiV1VpT2lKamFISnBjeTVzWVdsQWEyOXphWFJsWTJndVkyOXRMbWhySWl3aWRYTmxjbEp2YkdWT1lXMWxJam9pVTNsemRHVnRJRUZrYldsdUluMC56VW51MklkY08wNVFWWmhpdGdPUk9ObDA2ZUh0eTJPSmRNUHJETzc0Rnp3IiwiZXhwIjoxNjY1NzA5NTA3LCJpc3MiOiJ0d2lzdGxvY2sifQ.TM1BsmQeFEWzR8r-kdYOiQGluBywBZAQOjhSgo10nVw" https://asia-southeast1.cloud.twistlock.com/aws-singapore-961145920/api/v1/util/twistcli > twistcli; chmod a+x twistcli;
-      - twistcli --version
+      - ./twistcli --version
       - aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $AWS_CLUSTER_NAME --role-arn $AWS_ROLE_ARN
  
   build:
     commands:
       - docker build --tag $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$TAG
-      - twistcli images scan --address $ADDRESS --details $REPOSITORY_URI:$TAG
+      - ./twistcli images scan --address $ADDRESS --details $REPOSITORY_URI:$TAG
       - kubectl apply -f deployment.yaml
   post_build:
     commands:
